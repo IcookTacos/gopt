@@ -34,7 +34,8 @@ func loadConfig() (string, string){
 
 func status(w http.ResponseWriter, req *http.Request) {
   w.WriteHeader(http.StatusOK)
-  fmt.Fprintf(w, "Server running\n")
+  fmt.Fprintf(w, "Server: Running\n")
+  fmt.Fprintf(w, "Status: 200 OK\n")
   uagent := req.Header.Get("User-Agent")
   log.Printf("Request from: %s \n", uagent)
 }
@@ -42,7 +43,7 @@ func status(w http.ResponseWriter, req *http.Request) {
 func StartServer(){
   host, port := loadConfig()
   address := fmt.Sprintf("%s:%s", host, port)
-  fmt.Printf("Serving on %s\n", address)
+  fmt.Printf("Serving on %s\n", address) 
   http.HandleFunc("/api/status", status)
   http.ListenAndServe(address,nil)
 }
