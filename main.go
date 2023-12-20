@@ -1,7 +1,9 @@
 package main
 
-import "fmt"
+import (
+	"github.com/IcookTacos/gottp/server"
+)
 
 func main()  {
-  fmt.Println("Hello World!")
+  server.StartServer()
 }
