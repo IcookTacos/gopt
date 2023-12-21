@@ -1,10 +1,12 @@
 package server
 
 import (
+	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
 	"os"
+
 	"gopkg.in/yaml.v3"
 )
 
@@ -32,12 +34,21 @@ func loadConfig() (string, string){
   return host, port
 }
 
-func status(w http.ResponseWriter, req *http.Request) {
-  w.WriteHeader(http.StatusOK)
-  fmt.Fprintf(w, "Server: Running\n")
-  fmt.Fprintf(w, "Status: 200 OK\n")
+func logRequest(req *http.Request){
   uagent := req.Header.Get("User-Agent")
   log.Printf("Request from: %s \n", uagent)
+}
+
+func status(w http.ResponseWriter, req *http.Request) {
+  logRequest(req)
+  response := map[string]string{"message": "Server running", "status" : "200 OK"}
+  jsonResponse, err := json.Marshal(response)
+  if(err != nil){
+    http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		return
+  }
+  w.WriteHeader(http.StatusOK)
+  w.Write(jsonResponse)
 }
 
 func StartServer(){
