@@ -89,5 +89,6 @@ func StartServer(){
   fmt.Printf("Serving on %s\n", address) 
   http.HandleFunc("/api/status", status)
   http.HandleFunc("/api/list", list)
+  http.HandleFunc("/api/store", store)
   http.ListenAndServe(address,nil)
 }
