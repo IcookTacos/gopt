@@ -2,6 +2,7 @@ package server
 
 import (
 	"encoding/json"
+	"github.com/IcookTacos/gottp/storage"
 	"fmt"
 	"log"
 	"net/http"
@@ -63,7 +64,23 @@ func list(w http.ResponseWriter, req *http.Request){
 }
 
 func store(w http.ResponseWriter, req *http.Request){
-  //TODO: implement
+  if(req.Method != http.MethodPost){
+    response := fmt.Sprintf("Incorrect method\nGot     : %s\nRequire : %s", req.Method, http.MethodPost)
+    http.Error(w, response, http.StatusBadRequest)
+    return
+  }
+
+  err := storage.Insert("key1","value1")
+
+  if(err != nil){
+    http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+    return
+  }
+
+  response := map[string]string{"key1": "value1", "status" : "200 OK"}
+  jsonResponse, _ := json.Marshal(response)
+  w.WriteHeader(http.StatusOK)
+  w.Write(jsonResponse)
 }
 
 func StartServer(){
