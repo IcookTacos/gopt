@@ -6,7 +6,6 @@ import (
 	"log"
 	"net/http"
 	"os"
-
 	"gopkg.in/yaml.v3"
 )
 
@@ -41,7 +40,7 @@ func logRequest(req *http.Request){
 
 func status(w http.ResponseWriter, req *http.Request) {
   logRequest(req)
-  response := map[string]string{"message": "Server running", "status" : "200 OK"}
+  response := map[string]string{"server": "running", "status" : "200 OK"}
   jsonResponse, err := json.Marshal(response)
   if(err != nil){
     http.Error(w, "Internal Server Error", http.StatusInternalServerError)
@@ -51,10 +50,27 @@ func status(w http.ResponseWriter, req *http.Request) {
   w.Write(jsonResponse)
 }
 
+func list(w http.ResponseWriter, req *http.Request){
+  if(req.Method != http.MethodGet){
+    response := fmt.Sprintf("Incorrect method\nGot     : %s\nRequire : %s", req.Method, http.MethodGet)
+    http.Error(w, response, http.StatusBadRequest)
+    return
+  }
+  response := map[string]string{"data": " ", "status" : "200 OK"}
+  jsonResponse, _ := json.Marshal(response)
+  w.WriteHeader(http.StatusOK)
+  w.Write(jsonResponse)
+}
+
+func store(w http.ResponseWriter, req *http.Request){
+  //TODO: implement
+}
+
 func StartServer(){
   host, port := loadConfig()
   address := fmt.Sprintf("%s:%s", host, port)
   fmt.Printf("Serving on %s\n", address) 
   http.HandleFunc("/api/status", status)
+  http.HandleFunc("/api/list", list)
   http.ListenAndServe(address,nil)
 }
