@@ -2,10 +2,10 @@
 A http server written in go that can be used to persistently store key value pairs. Knowing the key of a key-value pair can be used to query the server for it's corresponding value.
 
 ## Table of Contents
-1. [Configuration 1](#Configuration)
-2. [Endpoints 2](#Endpoints)
-   1. [/api/status 2.1](#/api/status)
-   2. [/api/store 2.2](#/api/store)
+1. [Configuration](#Configuration)
+2. [Endpoints](#Endpoints)
+   1. [/api/status](#/api/status)
+   2. [/api/store](#/api/store)
 
 ## Configuration
 All configuration is specified in config.yaml
