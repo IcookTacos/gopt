@@ -1,7 +1,7 @@
 ## 📬  gottp
 A http server written in go that can be used to persistently store key value pairs. Knowing the key of a key-value pair can be used to query the server for it's corresponding value.
 
-## Table of Contents
+## Contents:
 1. [Configuration](#Configuration)
 2. [Endpoints](#Endpoints)
    1. [/api/status](#apistatus)
