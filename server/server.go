@@ -70,7 +70,7 @@ func store(w http.ResponseWriter, req *http.Request){
     return
   }
 
-  err := storage.Insert("key1","value1")
+  err := storage.Insert("key1", "value1")
 
   if(err != nil){
     http.Error(w, "Internal Server Error", http.StatusInternalServerError)
