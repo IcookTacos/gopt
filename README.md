@@ -4,8 +4,8 @@ A http server written in go that can be used to persistently store key value pai
 ## Table of Contents
 1. [Configuration](#Configuration)
 2. [Endpoints](#Endpoints)
-      [/api/status](#/api/status)
-      [/api/store](#/api/store)
+   1. [/api/status](#/api/status-21)
+   2. [/api/store](#/api/store-22)
 
 ## Configuration
 All configuration is specified in config.yaml
