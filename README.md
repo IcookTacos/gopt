@@ -1,8 +1,6 @@
 ## 📬  gottp
 A http server written in go that can be used to persistently store key value pairs. Knowing the key of a key-value pair can be used to query the server for it's corresponding value.
 
-[[_TOC_]]
-
 ## Configuration
 All configuration is specified in config.yaml
 
