@@ -4,6 +4,12 @@ A http server written in go that can be used to persistently store key value pai
 ## Configuration
 All configuration is specified in config.yaml
 
+```yaml
+server:
+  port: "8090"
+  host: "localhost"
+```
+
 The repo comes packaged with a pre-built binary, if needed to run / build  CGO might be needed
 
 ```bash
