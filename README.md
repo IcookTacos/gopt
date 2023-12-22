@@ -20,8 +20,9 @@ export CGO_ENABLED=1
 Configure the host and port you wish to run the server on. Below examplees assumes localhost and 8090.
 
 ### /api/status
+This endpoint is meant to be used as a basic health check / sanity check. It holds little to no logic and sole purpose is to test connectivity towards the server and that the HTTP call / response flow is ensured.
 
-Example call:
+Call:
 ```bash
 curl localhost:8090/api/status
 ```
@@ -32,6 +33,7 @@ Response:
 ```
 
 ### /api/store
+Making a POST request towrads this endpoint with a key-value pair and the server will store these.
 
 Example call:
 ```bash
