@@ -2,11 +2,13 @@ package server
 
 import (
 	"encoding/json"
-	"github.com/IcookTacos/gottp/storage"
 	"fmt"
+	"io"
 	"log"
 	"net/http"
 	"os"
+
+	"github.com/IcookTacos/gottp/storage"
 	"gopkg.in/yaml.v3"
 )
 
@@ -15,6 +17,11 @@ type Config struct {
 		Port string `yaml:"port"`
 		Host string `yaml:"host"`
 	} `yaml:"server"`
+}
+
+type Storage struct {
+	Key string `json:"key"`
+	Value string `json:"value"`
 }
 
 func loadConfig() (string, string){
@@ -64,13 +71,29 @@ func list(w http.ResponseWriter, req *http.Request){
 }
 
 func store(w http.ResponseWriter, req *http.Request){
+
   if(req.Method != http.MethodPost){
     response := fmt.Sprintf("Incorrect method\nGot     : %s\nRequire : %s", req.Method, http.MethodPost)
     http.Error(w, response, http.StatusBadRequest)
     return
   }
 
-  err := storage.Insert("key1", "value1")
+  body, err := io.ReadAll(req.Body)
+
+  if(err != nil){
+    http.Error(w, "Error reading request body", http.StatusBadRequest)
+  }
+
+  var data Storage
+
+  err = json.Unmarshal(body, &data)
+
+  if err != nil {
+		http.Error(w, "Error decoding JSON data", http.StatusBadRequest)
+		return
+	}
+
+  err = storage.Insert(data.Key, data.Value)
 
   if(err != nil){
     http.Error(w, "Internal Server Error", http.StatusInternalServerError)

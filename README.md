@@ -1,7 +1,7 @@
 ## 📬  gottp
-A http server written in go
+A http server written in go that can be used to persistently store key value pairs. Knowing the key of a key-value pair can be used to query the server for it's corresponding value.
 
-## 📂 Configuration & Other
+## Configuration
 All configuration is specified in config.yaml
 
 The repo comes packaged with a pre-built binary, if needed to run / build  CGO might be needed
@@ -9,19 +9,42 @@ The repo comes packaged with a pre-built binary, if needed to run / build  CGO m
 export CGO_ENABLED=1
 ```
 
-## 📧 Usage
-Configure the host and port you wish to run the server on.
+## API & Endpoints
+Configure the host and port you wish to run the server on. Below examplees assumes localhost and 8090.
 
 ```bash
-go run .
+api/status
 ```
 
-Example using curl as a client to interact with the server 
+Example call:
 ```bash
 curl localhost:8090/api/status
 ```
 
-Example response
+Response
 ```json
 {"data":"\n","status":"200 OK\n"}
+```
+
+```bash
+api/store
+```
+
+Example call:
+```bash
+curl -X POST -H "Content-Type: application/json" -d @data.json http://localhost:8090/api/store
+```
+
+Where data.json is expected to follow:
+```json
+{
+    "key" : "your_key",
+    "value" : "some_value"
+}
+```
+
+Response
+```json
+{"data":"\n","status":"200 OK\n"}
+{"your_key":"some_value","status":"200 OK"}
 ```
