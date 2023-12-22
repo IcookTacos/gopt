@@ -1,6 +1,8 @@
 ## 📬  gottp
 A http server written in go that can be used to persistently store key value pairs. Knowing the key of a key-value pair can be used to query the server for it's corresponding value.
 
+[[_TOC_]]
+
 ## Configuration
 All configuration is specified in config.yaml
 
@@ -13,7 +15,7 @@ export CGO_ENABLED=1
 ## API & Endpoints
 Configure the host and port you wish to run the server on. Below examplees assumes localhost and 8090.
 
-### api/status
+### /api/status
 
 Example call:
 ```bash
@@ -25,7 +27,7 @@ Response:
 {"data":"\n","status":"200 OK\n"}
 ```
 
-### api/store
+### /api/store
 
 Example call:
 ```bash
