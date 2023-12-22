@@ -40,14 +40,10 @@ curl -X POST -H "Content-Type: application/json" -d @data.json http://localhost:
 
 Expected data.json:
 ```json
-{
-    "key" : "your_key",
-    "value" : "some_value"
-}
+{ "key" : "your_key", "value" : "some_value" }
 ```
 
 Response:
 ```json
-{"data":"\n","status":"200 OK\n"}
 {"your_key":"some_value","status":"200 OK"}
 ```
