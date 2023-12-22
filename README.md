@@ -35,12 +35,12 @@ Response:
 ### /api/store
 Making a POST request towrads this endpoint with a key-value pair and the server will store these.
 
-Example call:
+Call:
 ```bash
 curl -X POST -H "Content-Type: application/json" -d @data.json http://localhost:8090/api/store
 ```
 
-Expected data.json:
+data.json:
 ```json
 { "key" : "your_key", "value" : "some_value" }
 ```
