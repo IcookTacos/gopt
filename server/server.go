@@ -64,7 +64,11 @@ func list(w http.ResponseWriter, req *http.Request){
     http.Error(w, response, http.StatusBadRequest)
     return
   }
-  response := map[string]string{"data": " ", "status" : "200 OK"}
+
+  // TODO: Refactor this with a mux so any key can be used with /api/list
+  _, result := storage.List("k1")
+
+  response := map[string]interface{}{"data": result, "status": "200 OK"}
   jsonResponse, _ := json.Marshal(response)
   w.WriteHeader(http.StatusOK)
   w.Write(jsonResponse)
