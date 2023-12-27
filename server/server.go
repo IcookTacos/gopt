@@ -8,7 +8,7 @@ import (
 	"net/http"
 	"os"
   "github.com/gorilla/mux"
-	"github.com/IcookTacos/gottp/storage"
+	"github.com/IcookTacos/kvdbstore/storage"
 	"gopkg.in/yaml.v3"
 )
 
