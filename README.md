@@ -61,10 +61,10 @@ List the value for a given key. Returns a 200 OK response and the value of the c
 
 Call:
 ```bash
-curl localhost:8090/api/list/key
+curl localhost:8090/api/list/your_key
 ```
 
 Response:
 ```json
-{"data":"value","status":"200 OK"}
+{"data":"some_value","status":"200 OK"}
 ```
