@@ -1,5 +1,5 @@
 ## 📬  kvdbstore
-A http server written in go that can be used to persistently store & retrieve key value pairs.
+HTTP server that can persistently store and retrieve key-value pairs. Exposes a resftull API to interact with stored values and to store new key-value pairs.
 
 ## Contents:
 1. [Configuration](#Configuration)
