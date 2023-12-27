@@ -1,5 +1,5 @@
-## 📬  gottp
-A http server written in go that can be used to persistently store & retrieve key value pairs. As of this writing It's using a sqlite3 database as persistent storage. 
+## 📬  kvdbstore
+A http server written in go that can be used to persistently store & retrieve key value pairs.
 
 ## Contents:
 1. [Configuration](#Configuration)
@@ -26,7 +26,7 @@ export CGO_ENABLED=1
 Configure the host and port you wish to run the server on. Below examplees assumes localhost and 8090.
 
 ### /api/status
-This endpoint is meant to be used as a basic health check / sanity check. It holds little to no logic and sole purpose is to test connectivity towards the server and that the HTTP call / response flow is ensured.
+Ensures basic functionality and can be used to test connectivity. Returns a 200 OK response on request.
 
 Call:
 ```bash
@@ -39,7 +39,7 @@ Response:
 ```
 
 ### /api/store
-Making a POST request towrads this endpoint with a key-value pair and the server will store these.
+Store a key-value pair. Asumes a data payload with key and value, see data.json below as example. Returns a 200 OK response and the key-value pair after successfull storeage.
 
 Call:
 ```bash
@@ -57,7 +57,7 @@ Response:
 ```
 
 ### /api/list
-List the value for a given key. 
+List the value for a given key. Returns a 200 OK response and the value of the corresponding key.
 
 Call:
 ```bash
