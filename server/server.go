@@ -7,7 +7,7 @@ import (
 	"log"
 	"net/http"
 	"os"
-
+  "github.com/gorilla/mux"
 	"github.com/IcookTacos/gottp/storage"
 	"gopkg.in/yaml.v3"
 )
@@ -65,8 +65,14 @@ func list(w http.ResponseWriter, req *http.Request){
     return
   }
 
-  // TODO: Refactor this with a mux so any key can be used with /api/list
-  _, result := storage.List("k1")
+  vars := mux.Vars(req)
+  key := vars["key"]
+  err, result := storage.List(key)
+
+  if(err!=nil){
+    http.Error(w, "Bad request, key not found", http.StatusBadRequest)
+    return 
+  }
 
   response := map[string]interface{}{"data": result, "status": "200 OK"}
   jsonResponse, _ := json.Marshal(response)
@@ -113,9 +119,11 @@ func store(w http.ResponseWriter, req *http.Request){
 func StartServer(){
   host, port := loadConfig()
   address := fmt.Sprintf("%s:%s", host, port)
+  router := mux.NewRouter()
+  router.HandleFunc("/api/status", status)
+  router.HandleFunc("/api/list/{key}", list)
+  router.HandleFunc("/api/store", store)
+  http.Handle("/", router)
   fmt.Printf("Serving on %s\n", address) 
-  http.HandleFunc("/api/status", status)
-  http.HandleFunc("/api/list", list)
-  http.HandleFunc("/api/store", store)
   http.ListenAndServe(address,nil)
 }
