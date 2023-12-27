@@ -55,3 +55,16 @@ Response:
 ```json
 {"your_key":"some_value","status":"200 OK"}
 ```
+
+### /api/list
+List the value for a given key. 
+
+Call:
+```bash
+curl localhost:8090/api/list/key
+```
+
+Response:
+```json
+{"data":"value","status":"200 OK"}
+```
