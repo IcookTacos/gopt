@@ -1,5 +1,5 @@
 ## 📬  gottp
-A http server written in go that can be used to persistently store key value pairs. Knowing the key of a key-value pair can be used to query the server for it's corresponding value.
+A http server written in go that can be used to persistently store & retrieve key value pairs. As of this writing It's using a sqlite3 database as persistent storage. 
 
 ## Contents:
 1. [Configuration](#Configuration)
