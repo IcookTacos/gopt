@@ -10,7 +10,7 @@ import (
 func Insert(key string, value string) error{
   db, err := sql.Open("sqlite3", "storage/database.db")
 
-  if(err!=nil){
+  if err!=nil {
     log.Println("Error when opening databse")
     return err
   }
@@ -19,7 +19,7 @@ func Insert(key string, value string) error{
 
   _, err = db.Exec("INSERT OR REPLACE INTO key_value_pairs (key, value) VALUES (?, ?)", key, value)
 
-  if(err!=nil){
+  if err!=nil {
     log.Println("Error when doing INSERT", err)
     return err
   }
@@ -33,7 +33,7 @@ func Insert(key string, value string) error{
 func List(key string) (error, string) {
   db, err := sql.Open("sqlite3", "storage/database.db")
 
-  if(err!=nil){
+  if err!=nil {
     log.Println("Error when interfacing with databse")
     return err, ""
   }

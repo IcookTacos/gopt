@@ -50,7 +50,7 @@ func status(w http.ResponseWriter, req *http.Request) {
   logRequest(req)
   response := map[string]string{"server": "running", "status" : "200 OK"}
   jsonResponse, err := json.Marshal(response)
-  if(err != nil){
+  if err != nil {
     http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 		return
   }
@@ -59,7 +59,7 @@ func status(w http.ResponseWriter, req *http.Request) {
 }
 
 func list(w http.ResponseWriter, req *http.Request){
-  if(req.Method != http.MethodGet){
+  if req.Method != http.MethodGet {
     response := fmt.Sprintf("Incorrect method\nGot     : %s\nRequire : %s", req.Method, http.MethodGet)
     http.Error(w, response, http.StatusBadRequest)
     return
@@ -69,7 +69,7 @@ func list(w http.ResponseWriter, req *http.Request){
   key := vars["key"]
   err, result := storage.List(key)
 
-  if(err!=nil){
+  if err!=nil {
     http.Error(w, "Bad request, key not found", http.StatusBadRequest)
     return 
   }
@@ -82,7 +82,7 @@ func list(w http.ResponseWriter, req *http.Request){
 
 func store(w http.ResponseWriter, req *http.Request){
 
-  if(req.Method != http.MethodPost){
+  if req.Method != http.MethodPost {
     response := fmt.Sprintf("Incorrect method\nGot     : %s\nRequire : %s", req.Method, http.MethodPost)
     http.Error(w, response, http.StatusBadRequest)
     return
@@ -90,7 +90,7 @@ func store(w http.ResponseWriter, req *http.Request){
 
   body, err := io.ReadAll(req.Body)
 
-  if(err != nil){
+  if err != nil {
     http.Error(w, "Error reading request body", http.StatusBadRequest)
   }
 
@@ -105,7 +105,7 @@ func store(w http.ResponseWriter, req *http.Request){
 
   err = storage.Insert(data.Key, data.Value)
 
-  if(err != nil){
+  if err != nil {
     http.Error(w, "Internal Server Error", http.StatusInternalServerError)
     return
   }
