@@ -6,6 +6,7 @@ HTTP server that can persistently store and retrieve key-value pairs. Exposes a 
 2. [Endpoints](#Endpoints)
    1. [/api/status](#apistatus)
    2. [/api/store](#apistore)
+   3. [/api/list](#apilist)
 
 ## Configuration
 All configuration is specified in config.yaml
