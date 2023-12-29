@@ -3,13 +3,13 @@ package server
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/IcookTacos/kvdbstore/storage"
+	"github.com/gorilla/mux"
+	"gopkg.in/yaml.v3"
 	"io"
 	"log"
 	"net/http"
 	"os"
-  "github.com/gorilla/mux"
-	"github.com/IcookTacos/kvdbstore/storage"
-	"gopkg.in/yaml.v3"
 )
 
 type Config struct {
@@ -20,12 +20,12 @@ type Config struct {
 }
 
 type Storage struct {
-	Key string `json:"key"`
+	Key   string `json:"key"`
 	Value string `json:"value"`
 }
 
-func loadConfig() (string, string){
-  conf, err := os.ReadFile("config.yaml")
+func loadConfig() (string, string) {
+	conf, err := os.ReadFile("config.yaml")
 	if err != nil {
 		log.Fatalf("Error reading configuration file: %v", err)
 	}
@@ -38,91 +38,91 @@ func loadConfig() (string, string){
 
 	host := config.Server.Host
 	port := config.Server.Port
-  return host, port
+	return host, port
 }
 
-func logRequest(req *http.Request){
-  uagent := req.Header.Get("User-Agent")
-  log.Printf("Request from: %s \n", uagent)
+func logRequest(req *http.Request) {
+	uagent := req.Header.Get("User-Agent")
+	log.Printf("Request from: %s \n", uagent)
 }
 
 func status(w http.ResponseWriter, req *http.Request) {
-  logRequest(req)
-  response := map[string]string{"server": "running", "status" : "200 OK"}
-  jsonResponse, err := json.Marshal(response)
-  if err != nil {
-    http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+	logRequest(req)
+	response := map[string]string{"server": "running", "status": "200 OK"}
+	jsonResponse, err := json.Marshal(response)
+	if err != nil {
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 		return
-  }
-  w.WriteHeader(http.StatusOK)
-  w.Write(jsonResponse)
+	}
+	w.WriteHeader(http.StatusOK)
+	w.Write(jsonResponse)
 }
 
-func list(w http.ResponseWriter, req *http.Request){
-  if req.Method != http.MethodGet {
-    response := fmt.Sprintf("Incorrect method\nGot     : %s\nRequire : %s", req.Method, http.MethodGet)
-    http.Error(w, response, http.StatusBadRequest)
-    return
-  }
+func list(w http.ResponseWriter, req *http.Request) {
+	if req.Method != http.MethodGet {
+		response := fmt.Sprintf("Incorrect method\nGot     : %s\nRequire : %s", req.Method, http.MethodGet)
+		http.Error(w, response, http.StatusBadRequest)
+		return
+	}
 
-  vars := mux.Vars(req)
-  key := vars["key"]
-  err, result := storage.List(key)
+	vars := mux.Vars(req)
+	key := vars["key"]
+	err, result := storage.List(key)
 
-  if err!=nil {
-    http.Error(w, "Bad request, key not found", http.StatusBadRequest)
-    return 
-  }
+	if err != nil {
+		http.Error(w, "Bad request, key not found", http.StatusBadRequest)
+		return
+	}
 
-  response := map[string]interface{}{"data": result, "status": "200 OK"}
-  jsonResponse, _ := json.Marshal(response)
-  w.WriteHeader(http.StatusOK)
-  w.Write(jsonResponse)
+	response := map[string]interface{}{"data": result, "status": "200 OK"}
+	jsonResponse, _ := json.Marshal(response)
+	w.WriteHeader(http.StatusOK)
+	w.Write(jsonResponse)
 }
 
-func store(w http.ResponseWriter, req *http.Request){
-  if req.Method != http.MethodPost {
-    response := fmt.Sprintf("Incorrect method\nGot     : %s\nRequire : %s", req.Method, http.MethodPost)
-    http.Error(w, response, http.StatusBadRequest)
-    return
-  }
+func store(w http.ResponseWriter, req *http.Request) {
+	if req.Method != http.MethodPost {
+		response := fmt.Sprintf("Incorrect method\nGot     : %s\nRequire : %s", req.Method, http.MethodPost)
+		http.Error(w, response, http.StatusBadRequest)
+		return
+	}
 
-  body, err := io.ReadAll(req.Body)
+	body, err := io.ReadAll(req.Body)
 
-  if err != nil {
-    http.Error(w, "Error reading request body", http.StatusBadRequest)
-  }
+	if err != nil {
+		http.Error(w, "Error reading request body", http.StatusBadRequest)
+	}
 
-  var data Storage
+	var data Storage
 
-  err = json.Unmarshal(body, &data)
+	err = json.Unmarshal(body, &data)
 
-  if err != nil {
+	if err != nil {
 		http.Error(w, "Error decoding JSON data", http.StatusBadRequest)
 		return
 	}
 
-  err = storage.Store(data.Key, data.Value)
+	err = storage.Store(data.Key, data.Value)
 
-  if err != nil {
-    http.Error(w, "Internal Server Error", http.StatusInternalServerError)
-    return
-  }
+	if err != nil {
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		return
+	}
 
-  response := map[string]interface{}{data.Key: data.Value, "status": "200 OK"}
-  jsonResponse, _ := json.Marshal(response)
-  w.WriteHeader(http.StatusOK)
-  w.Write(jsonResponse)
+	response := map[string]interface{}{data.Key: data.Value, "status": "200 OK"}
+	jsonResponse, _ := json.Marshal(response)
+	w.WriteHeader(http.StatusOK)
+	w.Write(jsonResponse)
 }
 
-func StartServer(){
-  host, port := loadConfig()
-  address := fmt.Sprintf("%s:%s", host, port)
-  router := mux.NewRouter()
-  router.HandleFunc("/api/status", status)
-  router.HandleFunc("/api/list/{key}", list)
-  router.HandleFunc("/api/store", store)
-  http.Handle("/", router)
-  fmt.Printf("Serving on %s\n", address) 
-  http.ListenAndServe(address,nil)
+func StartServer() {
+	host, port := loadConfig()
+	address := fmt.Sprintf("%s:%s", host, port)
+	router := mux.NewRouter()
+	router.HandleFunc("/api/status", status)
+	router.HandleFunc("/api/list/{key}", list)
+	router.HandleFunc("/api/store", store)
+	http.Handle("/", router)
+	fmt.Printf("Serving on %s\n", address)
+	http.ListenAndServe(address, nil)
 }

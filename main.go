@@ -4,6 +4,6 @@ import (
 	"github.com/IcookTacos/kvdbstore/server"
 )
 
-func main()  {
-  server.StartServer()
+func main() {
+	server.StartServer()
 }
