@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/IcookTacos/gottp/server"
+	"github.com/IcookTacos/kvdbstore/server"
 )
 
 func main()  {

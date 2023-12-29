@@ -81,7 +81,6 @@ func list(w http.ResponseWriter, req *http.Request){
 }
 
 func store(w http.ResponseWriter, req *http.Request){
-
   if req.Method != http.MethodPost {
     response := fmt.Sprintf("Incorrect method\nGot     : %s\nRequire : %s", req.Method, http.MethodPost)
     http.Error(w, response, http.StatusBadRequest)
