@@ -103,14 +103,14 @@ func store(w http.ResponseWriter, req *http.Request){
 		return
 	}
 
-  err = storage.Insert(data.Key, data.Value)
+  err = storage.Store(data.Key, data.Value)
 
   if err != nil {
     http.Error(w, "Internal Server Error", http.StatusInternalServerError)
     return
   }
 
-  response := map[string]string{"key1": "value1", "status" : "200 OK"}
+  response := map[string]interface{}{data.Key: data.Value, "status": "200 OK"}
   jsonResponse, _ := json.Marshal(response)
   w.WriteHeader(http.StatusOK)
   w.Write(jsonResponse)

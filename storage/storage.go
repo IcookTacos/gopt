@@ -7,7 +7,7 @@ import (
   _ "github.com/mattn/go-sqlite3"
 )
 
-func Insert(key string, value string) error{
+func Store(key string, value string) error{
   db, err := sql.Open("sqlite3", "storage/database.db")
 
   if err!=nil {
