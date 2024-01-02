@@ -20,7 +20,6 @@ type Config struct {
 }
 
 type Storage struct {
-	Key   string `json:"key"`
 	Value string `json:"value"`
 }
 
@@ -58,7 +57,7 @@ func status(w http.ResponseWriter, req *http.Request) {
 	w.Write(jsonResponse)
 }
 
-func list(w http.ResponseWriter, req *http.Request) {
+func get(w http.ResponseWriter, req *http.Request) {
 	if req.Method != http.MethodGet {
 		response := fmt.Sprintf("Incorrect method\nGot     : %s\nRequire : %s", req.Method, http.MethodGet)
 		http.Error(w, response, http.StatusBadRequest)
@@ -80,7 +79,7 @@ func list(w http.ResponseWriter, req *http.Request) {
 	w.Write(jsonResponse)
 }
 
-func store(w http.ResponseWriter, req *http.Request) {
+func post(w http.ResponseWriter, req *http.Request) {
 	if req.Method != http.MethodPost {
 		response := fmt.Sprintf("Incorrect method\nGot     : %s\nRequire : %s", req.Method, http.MethodPost)
 		http.Error(w, response, http.StatusBadRequest)
@@ -102,14 +101,17 @@ func store(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	err = storage.Store(data.Key, data.Value)
+	vars := mux.Vars(req)
+	key := vars["key"]
+
+	err = storage.Store(key, data.Value)
 
 	if err != nil {
 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 		return
 	}
 
-	response := map[string]interface{}{data.Key: data.Value, "status": "200 OK"}
+	response := map[string]interface{}{key: data.Value, "status": "200 OK"}
 	jsonResponse, _ := json.Marshal(response)
 	w.WriteHeader(http.StatusOK)
 	w.Write(jsonResponse)
@@ -119,9 +121,9 @@ func StartServer() {
 	host, port := loadConfig()
 	address := fmt.Sprintf("%s:%s", host, port)
 	router := mux.NewRouter()
-	router.HandleFunc("/api/status", status)
-	router.HandleFunc("/api/list/{key}", list)
-	router.HandleFunc("/api/store", store)
+	router.HandleFunc("/api/status", status).Methods("GET")
+	router.HandleFunc("/api/{key}", get).Methods("GET")
+	router.HandleFunc("/api/{key}", post).Methods("POST")
 	http.Handle("/", router)
 	fmt.Printf("Serving on %s\n", address)
 	http.ListenAndServe(address, nil)

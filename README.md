@@ -4,9 +4,9 @@ HTTP server that can persistently store and retrieve key-value pairs. Exposes a 
 ## Contents:
 1. [Configuration](#Configuration)
 2. [Endpoints](#Endpoints)
-   1. [/api/status](#apistatus)
-   2. [/api/store](#apistore)
-   3. [/api/list](#apilist)
+   1. [api/status](#apistatus)
+   2. [/api/ GET](#apiget)
+   3. [/api/ POST](#apipost)
 
 ## Configuration
 All configuration is specified in config.yaml
@@ -39,30 +39,30 @@ Response:
 {"data":"\n","status":"200 OK\n"}
 ```
 
-### /api/store
+### /api/ POST
 Store a key-value pair. Asumes a data payload with key and value, see data.json below as example. Returns a 200 OK response and the key-value pair after successfull storeage.
 
 Call:
 ```bash
-curl -X POST -H "Content-Type: application/json" -d @data.json http://localhost:8090/api/store
+curl -X POST -H "Content-Type: application/json" -d @data.json http://localhost:8090/api/some_key
 ```
 
 data.json:
 ```json
-{ "key" : "your_key", "value" : "some_value" }
+{ "value" : "some_value" }
 ```
 
 Response:
 ```json
-{"your_key":"some_value","status":"200 OK"}
+{"some_key":"some_value","status":"200 OK"}
 ```
 
-### /api/list
+### /api/ GET
 List the value for a given key. Returns a 200 OK response and the value of the corresponding key.
 
 Call:
 ```bash
-curl localhost:8090/api/list/your_key
+curl localhost:8090/api/list/some_key
 ```
 
 Response:

@@ -26,7 +26,6 @@ func Store(key string, value string) error {
 
 	log_message := fmt.Sprintf("Inserting %s : %s", key, value)
 	log.Println(log_message)
-
 	return err
 }
 
