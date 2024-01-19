@@ -3,7 +3,7 @@ package server
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/IcookTacos/kvdbstore/storage"
+	"github.com/IcookTacos/kvdbstore/pkg/storage"
 	"github.com/gorilla/mux"
 	"gopkg.in/yaml.v3"
 	"io"
