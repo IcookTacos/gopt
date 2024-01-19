@@ -23,8 +23,8 @@ type Storage struct {
 	Value string `json:"value"`
 }
 
-func loadConfig() (string, string) {
-	conf, err := os.ReadFile("config.yaml")
+func loadConfig(configPath string) (string, string) {
+	conf, err := os.ReadFile(configPath)
 	if err != nil {
 		log.Fatalf("Error reading configuration file: %v", err)
 	}
@@ -117,8 +117,8 @@ func post(w http.ResponseWriter, req *http.Request) {
 	w.Write(jsonResponse)
 }
 
-func StartServer() {
-	host, port := loadConfig()
+func StartServer(configPath string) {
+	host, port := loadConfig(configPath)
 	address := fmt.Sprintf("%s:%s", host, port)
 	router := mux.NewRouter()
 	router.HandleFunc("/api/status", status).Methods("GET")
