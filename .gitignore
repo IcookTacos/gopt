@@ -1,2 +1,8 @@
+# LSP junk
 .null-ls* 
+
+# Internal database 
 *.db
+
+# binary
+kvdbstore
