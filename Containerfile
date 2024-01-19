@@ -5,6 +5,5 @@ ENV CGO_ENABLED=0
 RUN go build -o kvdbstore cmd/main/main.go
 
 FROM gcr.io/distroless/static-debian12:nonroot
-#COPY --from=builder /app/kvdbstore /usr/bin/kvdbstore
 EXPOSE 8080
-ENTRYPOINT ["/app/kvdbstore"]
+ENTRYPOINT ["kvdbstore"]
