@@ -7,4 +7,4 @@ RUN go build -o kvdbstore cmd/main/main.go
 FROM gcr.io/distroless/static-debian12:nonroot
 COPY --from=builder /app/kvdbstore /usr/bin/kvdbstore
 EXPOSE 8080
-ENTRYPOINT ["/usr/bin/ahsport-be"]
+ENTRYPOINT ["/usr/bin/kvdbstore"]
