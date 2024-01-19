@@ -17,10 +17,27 @@ server:
   host: "localhost"
 ```
 
-The repo comes packaged with a pre-built binary, if needed to run / build  CGO might be needed
+## Running kvdbstore
+
+### Natively using go
+
+entry point resides under cmd/main/main.go, you can chose to run directly towards main.go
+
 
 ```bash
-export CGO_ENABLED=1
+go run cmd/main/main.go
+```
+
+or to build a binary
+```bash
+go build cmd/main/main.go
+./main.go
+```
+
+or using any containerization tool towards Containerfile, (example with podman)
+```bash
+podman build .
+podman run -it <CONTAINER-ID>
 ```
 
 ## Endpoints
