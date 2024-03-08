@@ -1,12 +1,14 @@
 ## 📬  kvdbstore
 HTTP server that can persistently store and retrieve key-value pairs. Exposes a resftull API to interact with stored values and to store new key-value pairs.
 
-## Contents:
-1. [Configuration](#Configuration)
-2. [Endpoints](#Endpoints)
-   1. [api/status](#apistatus)
-   2. [/api/ GET](#apiget)
-   3. [/api/ POST](#apipost)
+
+## TODO:
+
+1. Remove gorilla/mux
+
+2. Create a interface for storage
+
+3. Setup some unit tests 
 
 ## Configuration
 All configuration is specified in config.yaml
