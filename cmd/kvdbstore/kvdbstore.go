@@ -5,6 +5,6 @@ import (
 )
 
 func main() {
-  configPath := "config.yaml"
+	configPath := "config.yaml"
 	server.StartServer(configPath)
 }

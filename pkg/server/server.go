@@ -3,8 +3,8 @@ package server
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/zeidlitz/kvdbstore/pkg/storage"
 	"github.com/gorilla/mux"
+	"github.com/zeidlitz/kvdbstore/pkg/storage"
 	"gopkg.in/yaml.v3"
 	"io"
 	"log"
