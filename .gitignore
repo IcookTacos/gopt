@@ -3,6 +3,3 @@
 
 # Internal database 
 *.db
-
-# binary
-kvdbstore
