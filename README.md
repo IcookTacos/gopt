@@ -10,6 +10,12 @@ HTTP server that can persistently store and retrieve key-value pairs. Exposes a 
 
 3. Setup some unit tests 
 
+4. Split up some of the logic in load
+
+5. Refactor everything regarding err handling
+
+6. Align with whitespace convention
+
 ## Configuration
 All configuration is specified in config.yaml
 
