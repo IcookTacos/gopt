@@ -3,7 +3,6 @@ package server
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/gorilla/mux"
 	"github.com/zeidlitz/kvdbstore/pkg/storage"
 	"gopkg.in/yaml.v3"
 	"io"
@@ -20,6 +19,7 @@ type Config struct {
 }
 
 type Storage struct {
+	Key string `json:"key"`
 	Value string `json:"value"`
 }
 
@@ -59,7 +59,7 @@ func status(w http.ResponseWriter, req *http.Request) {
 
 func get(w http.ResponseWriter, req *http.Request) {
 	if req.Method != http.MethodGet {
-		response := fmt.Sprintf("Incorrect method\nGot     : %s\nRequire : %s", req.Method, http.MethodGet)
+		response := fmt.Sprintf("Incorrect method\nGot : %s\nRequire : %s", req.Method, http.MethodGet)
 		http.Error(w, response, http.StatusBadRequest)
 		return
 	}
@@ -67,7 +67,6 @@ func get(w http.ResponseWriter, req *http.Request) {
 	vars := mux.Vars(req)
 	key := vars["key"]
 	err, result := storage.List(key)
-
 	if err != nil {
 		http.Error(w, "Bad request, key not found", http.StatusBadRequest)
 		return
@@ -93,26 +92,23 @@ func post(w http.ResponseWriter, req *http.Request) {
 	}
 
 	var data Storage
-
 	err = json.Unmarshal(body, &data)
-
 	if err != nil {
 		http.Error(w, "Error decoding JSON data", http.StatusBadRequest)
 		return
 	}
 
-	vars := mux.Vars(req)
-	key := vars["key"]
-
-	err = storage.Store(key, data.Value)
-
+	err = storage.Store(data.Key, data.Value)
 	if err != nil {
 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 		return
 	}
 
-	response := map[string]interface{}{key: data.Value, "status": "200 OK"}
-	jsonResponse, _ := json.Marshal(response)
+	response := map[string]interface{}{data.Key: data.Value, "status": "200 OK"}
+	jsonResponse, err := json.Marshal(response)
+  if err != nil {
+    http.Error(w, err.Error(), http.StatusInternalServerError)
+  }
 	w.WriteHeader(http.StatusOK)
 	w.Write(jsonResponse)
 }
@@ -120,11 +116,9 @@ func post(w http.ResponseWriter, req *http.Request) {
 func StartServer(configPath string) {
 	host, port := loadConfig(configPath)
 	address := fmt.Sprintf("%s:%s", host, port)
-	router := mux.NewRouter()
-	router.HandleFunc("/api/status", status).Methods("GET")
-	router.HandleFunc("/api/{key}", get).Methods("GET")
-	router.HandleFunc("/api/{key}", post).Methods("POST")
-	http.Handle("/", router)
+	http.HandleFunc("/api/status", status)
+	http.HandleFunc("/api/{key}", get)
+	http.HandleFunc("/api/{key}", post)
 	fmt.Printf("Serving on %s\n", address)
 	http.ListenAndServe(address, nil)
 }
