@@ -8,7 +8,7 @@ import (
 )
 
 func Store(key string, value string) error {
-	db, err := sql.Open("sqlite3", "storage/database.db")
+	db, err := sql.Open("sqlite3", "pkg/storage/database.db")
 
 	if err != nil {
 		log.Println("Error when opening databse")
@@ -20,7 +20,7 @@ func Store(key string, value string) error {
 	_, err = db.Exec("INSERT OR REPLACE INTO key_value_pairs (key, value) VALUES (?, ?)", key, value)
 
 	if err != nil {
-		log.Println("Error when doing INSERT", err)
+    log.Println("Error when doing INSERT: ", err)
 		return err
 	}
 
@@ -30,7 +30,7 @@ func Store(key string, value string) error {
 }
 
 func List(key string) (error, string) {
-	db, err := sql.Open("sqlite3", "storage/database.db")
+	db, err := sql.Open("sqlite3", "pkg/storage/database.db")
 
 	if err != nil {
 		log.Println("Error when interfacing with databse")

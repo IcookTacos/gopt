@@ -18,7 +18,7 @@ type Config struct {
 	} `yaml:"server"`
 }
 
-type Storage struct {
+type Payload struct {
 	Key string `json:"key"`
 	Value string `json:"value"`
 }
@@ -45,6 +45,18 @@ func logRequest(req *http.Request) {
 	log.Printf("Request from: %s \n", uagent)
 }
 
+func apiHandler(w http.ResponseWriter, req *http.Request) {
+  method := req.Method
+
+  if method == http.MethodGet {
+    get(w, req)
+  }
+
+  if method == http.MethodPost {
+    post(w, req)
+  }
+}
+
 func status(w http.ResponseWriter, req *http.Request) {
 	logRequest(req)
 	response := map[string]string{"server": "running", "status": "200 OK"}
@@ -58,17 +70,20 @@ func status(w http.ResponseWriter, req *http.Request) {
 }
 
 func get(w http.ResponseWriter, req *http.Request) {
-	if req.Method != http.MethodGet {
-		response := fmt.Sprintf("Incorrect method\nGot : %s\nRequire : %s", req.Method, http.MethodGet)
-		http.Error(w, response, http.StatusBadRequest)
-		return
-	}
+  body, err := io.ReadAll(req.Body)
+  if err != nil {
+		http.Error(w, "Error reading request body", http.StatusBadRequest)
+  }
 
-	vars := mux.Vars(req)
-	key := vars["key"]
-	err, result := storage.List(key)
+	var data Payload
+  err = json.Unmarshal(body, &data)
+  if err != nil {
+		http.Error(w, "Error unmarshalling request payload", http.StatusBadRequest)
+  }
+
+	err, result := storage.List(data.Key)
 	if err != nil {
-		http.Error(w, "Bad request, key not found", http.StatusBadRequest)
+    http.Error(w, "Bad request: key not found", http.StatusBadRequest)
 		return
 	}
 
@@ -86,12 +101,11 @@ func post(w http.ResponseWriter, req *http.Request) {
 	}
 
 	body, err := io.ReadAll(req.Body)
-
 	if err != nil {
 		http.Error(w, "Error reading request body", http.StatusBadRequest)
 	}
 
-	var data Storage
+	var data Payload
 	err = json.Unmarshal(body, &data)
 	if err != nil {
 		http.Error(w, "Error decoding JSON data", http.StatusBadRequest)
@@ -117,8 +131,7 @@ func StartServer(configPath string) {
 	host, port := loadConfig(configPath)
 	address := fmt.Sprintf("%s:%s", host, port)
 	http.HandleFunc("/api/status", status)
-	http.HandleFunc("/api/{key}", get)
-	http.HandleFunc("/api/{key}", post)
+	http.HandleFunc("/api", apiHandler)
 	fmt.Printf("Serving on %s\n", address)
 	http.ListenAndServe(address, nil)
 }
