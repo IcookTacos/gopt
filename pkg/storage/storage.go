@@ -20,7 +20,7 @@ func Store(key string, value string) error {
 	_, err = db.Exec("INSERT OR REPLACE INTO key_value_pairs (key, value) VALUES (?, ?)", key, value)
 
 	if err != nil {
-    log.Println("Error when doing INSERT: ", err)
+		log.Println("Error when doing INSERT: ", err)
 		return err
 	}
 
