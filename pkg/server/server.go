@@ -23,21 +23,22 @@ type Payload struct {
 	Value string `json:"value"`
 }
 
-func loadConfig(configPath string) (string, string) {
+func LoadConfig(configPath string) (error, string) {
 	conf, err := os.ReadFile(configPath)
 	if err != nil {
-		log.Fatalf("Error reading configuration file: %v", err)
+    return err, ""
 	}
 
 	var config Config
 	err = yaml.Unmarshal(conf, &config)
 	if err != nil {
-		log.Fatalf("Error unmarshalling YAML: %v", err)
+    return err, ""
 	}
 
 	host := config.Server.Host
 	port := config.Server.Port
-	return host, port
+	address := fmt.Sprintf("%s:%s", host, port)
+	return nil, address
 }
 
 func logRequest(req *http.Request) {
@@ -127,9 +128,8 @@ func post(w http.ResponseWriter, req *http.Request) {
 	w.Write(jsonResponse)
 }
 
-func StartServer(configPath string) {
-	host, port := loadConfig(configPath)
-	address := fmt.Sprintf("%s:%s", host, port)
+func StartServer(address string) {
+  // host, port := loadConfig(configPath)
 	http.HandleFunc("/api/status", status)
 	http.HandleFunc("/api", apiHandler)
 	fmt.Printf("Serving on %s\n", address)

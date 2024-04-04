@@ -4,17 +4,11 @@ HTTP server that can persistently store and retrieve key-value pairs. Exposes a 
 
 ## TODO:
 
-1. Remove gorilla/mux
+1. Create a interface for storage
 
-2. Create a interface for storage
+2. Setup some unit tests 
 
-3. Setup some unit tests 
-
-4. Split up some of the logic in load
-
-5. Refactor everything regarding err handling
-
-6. Align with whitespace convention
+3. Refactor everything regarding err handling
 
 ## Configuration
 All configuration is specified in config.yaml
